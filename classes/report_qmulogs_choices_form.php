@@ -62,13 +62,13 @@ class report_qmulogs_choices_form extends moodleform
 			$user_courses = enrol_get_all_users_courses($USER->id, $only_active = FALSE,
 														'id, idnumber, shortname, 
 															  fullname, category, startdate, visible');
-
+/*
 			foreach($user_courses as $cid => $course){
 				if(!is_teacher_in_list($USER, get_course_teacher_ids($cid))) {
 					unset($user_courses[$cid]);
 				}
 			}
-
+*/
 			$moodle_form = &$this->_form;
 			$moodle_form->addElement('hidden', 'sesskey', sesskey());
 			$moodle_form->addElement('header', $strings['fields_choice_header'], $strings['fields_choice_header_desc']);
