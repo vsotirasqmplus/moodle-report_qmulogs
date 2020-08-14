@@ -31,4 +31,4 @@ if(!isset($plugin)) {
 $plugin->component = 'report_qmulogs';
 $plugin->name = 'QM+ Logstore extended logs';
 $plugin->requires = 2019111200;
-$plugin->version = 2020081400;
+$plugin->version = 2020081401;
