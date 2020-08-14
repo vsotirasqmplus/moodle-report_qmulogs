@@ -15,20 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * Capabilities
  *
- * This File contains information about the current version of report/logs
+ * Defines capablities related to qm+
  *
- * @package    report_qmulog
- * @copyright  2020 onwards Vasileios Sotiras
+ * @package    report_qmulogs
+ * @copyright  2020 Queen Mary University of London
+ * @author     Vasileios Sotiras  <v.sotiras@qmul.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
-if(!isset($plugin)) {
-	$plugin = new stdClass();
-}
-$plugin->component = 'report_qmulogs';
-$plugin->name = 'QM+ Logstore extended logs';
-$plugin->requires = 2019111200;
-$plugin->version = 2020081402;
+defined('MOODLE_INTERNAL') || die();
+$capabilities = array(
+
+    'report/qmulogs:view' => array(
+        'riskbitmask' => RISK_CONFIG,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW,
+			'teacher' => CAP_ALLOW,
+			'editingteacher' => CAP_ALLOW,
+        ),
+    ),
+);

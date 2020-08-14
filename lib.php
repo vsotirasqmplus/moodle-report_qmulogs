@@ -3,7 +3,7 @@
 function report_qmulogs_extend_navigation_course($navigation, $course, $context)
 {
 	try {
-		if(has_capability('report/myreport:view', $context)) {
+		if(has_capability('report/qmulogs:view', $context)) {
 			$url = new moodle_url('/report/qmulogs/index.php', array('id' => $course->id));
 			$navigation->add(get_string('pluginname', 'report_qmulogs'), $url, navigation_node::TYPE_SETTING, NULL, NULL, new pix_icon('i/report', ''));
 		}
