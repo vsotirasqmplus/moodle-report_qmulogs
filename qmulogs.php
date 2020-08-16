@@ -23,10 +23,12 @@
  * @copyright  2020 onwards Vasileios Sotiras
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use report_qmulogs\report_qmulogs_lib;
+
 require_once '../../config.php';
 defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 /** @var object $CFG */
-/** @noinspection PhpIncludeInspection */
 require_once './locallib.php';
 try {
 	$sesskey = required_param('sesskey', PARAM_RAW);
@@ -44,7 +46,7 @@ try {
 		# $PAGE->navbar->add($title, new moodle_url($url));
 
 		# Save posted preferences
-		$pref_name = get_preference_name();
+		$pref_name = report_qmulogs_lib::get_preference_name();
 		$form_data = [];
 		if($_POST) {
 			foreach($_POST as $key => $value){
@@ -55,17 +57,16 @@ try {
 					$form_data[$key] = $value;
 				}
 			}
-			# set_user_preference($pref_name, encode_preferences($form_data), (int)$USER->id);
-			$errors = form_store_data($pref_name, $form_data);
+			$errors = report_qmulogs_lib::form_store_data($pref_name, $form_data);
 		}
 
 		# Get the logs and transform them to CSV
-		$sql = get_logs_sql($form_data);
+		$sql = report_qmulogs_lib::get_logs_sql($form_data);
 		/** @var object $DB */
 		$course_short_name = $DB->get_field('course', 'shortname', ['id' => $course_id]);
 		$course_short_name = preg_replace('~\P{Xan}++~u', '-', $course_short_name);
 		# $course_short_name = base64_safe_encode($course_short_name);
-		$logs = get_course_logs($sql);
+		$logs = report_qmulogs_lib::get_course_logs($sql);
 		if($logs) {
 			header('HTTP/1.1 200 OK');
 			header("Content-type: text/csv");

@@ -17,7 +17,7 @@
 /**
  * Capabilities
  *
- * Defines capablities related to qm+
+ * Defines capabilities related to qm+
  *
  * @package    report_qmulogs
  * @copyright  2020 Queen Mary University of London

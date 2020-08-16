@@ -23,7 +23,6 @@
  * @copyright  2020 onwards Vasileios Sotiras
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['allsources'] = 'All sources';
 $string['fields_choice_header'] = 'fields_choice_header';
 $string['fields_choice_header_desc'] = 'Report fields selector for the CSV';
 $string['table_name'] = 'table_name';

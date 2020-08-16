@@ -74,16 +74,16 @@ class report_qmulogs_choices_form extends moodleform
 			$moodle_form->addElement('header', $strings['fields_choice_header'], $strings['fields_choice_header_desc']);
 
 			$moodle_form->addElement('static', $strings['table_name'], $strings['table_name_desc'],
-									 get_standard_log_table_name(), ['font-weight' => 'bold']);
+									 report_qmulogs_lib::get_standard_log_table_name(), ['font-weight' => 'bold']);
 
 			# Get all the table fields to prepare the form elements
-			$fields = get_table_fields();
+			$fields = report_qmulogs_lib::get_table_fields();
 			foreach($fields as $name => $record){
 				$element = 'field_' . $name;
 				$this->field_choices[$element] = new stdClass();
 				$this->field_choices[$element]->field = $name;
 				$this->field_choices[$element]->always = in_array($name,
-																  mandatory_fields(),
+																  report_qmulogs_lib::mandatory_fields(),
 																  TRUE);
 				$this->field_choices[$element]->selected = $this->field_choices[$element]->always;
 			}

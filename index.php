@@ -28,6 +28,7 @@ require_once '../../config.php';
 require_once $CFG->dirroot . '/lib/enrollib.php';
 require_once $CFG->dirroot . '/report/qmulogs/locallib.php';
 use report_qmulogs\report_qmulogs_choices_form;
+use report_qmulogs\report_qmulogs_lib;
 
 # Main page contents
 try {
@@ -43,30 +44,28 @@ try {
 	$PAGE->navbar->add($title, new moodle_url($url));
 	$html = '';
 
-	if($te = table_exists($table_name = get_standard_log_table_name())) {
+	if($te = report_qmulogs_lib::table_exists($table_name = report_qmulogs_lib::get_standard_log_table_name())) {
 
 		$courses = enrol_get_all_users_courses($USER->id, $only_active = FALSE,
 											   'id, idnumber, shortname, fullname, category, startdate, visible');
 		if($courses) {
-			$default_preferences = get_default_preferences();
-			$pref_name = get_preference_name();
+			$default_preferences = report_qmulogs_lib::get_default_preferences();
+			$pref_name = report_qmulogs_lib::get_preference_name();
 			$preferences = get_user_preferences($pref_name, $default_preferences, $USER->id);
 			$courses_form = new report_qmulogs_choices_form('./qmulogs.php', $preferences, 'post',
 															'_blank', $attr = NULL,
 															$editable = TRUE, $ajax_form_data = []);
 
 			if($courses_form->is_cancelled()) {
-				safe_redirect($_SERVER['HTTP_REFERER']);
+				report_qmulogs_lib::safe_redirect($_SERVER['HTTP_REFERER']);
 			} elseif($courses_form->is_submitted() && ($form_data = $courses_form->get_data())) {
 				$html .= $strings['redirect_desc'];
-				safe_redirect($_SERVER['HTTP_REFERER']);
+				report_qmulogs_lib::safe_redirect($_SERVER['HTTP_REFERER']);
 			} else {
 				# Get and prepare form data
 				$field_checks = [];
-				$default_preferences = get_default_preferences();
-				$preferences = get_user_preferences($pref_name, $default_preferences, $USER->id);
 				if($preferences) {
-					$preferences = decode_preferences($preferences);
+					$preferences = report_qmulogs_lib::decode_preferences($preferences);
 					foreach($preferences as $field => $preference){
 						$field_checks[$field] = $preference;
 					}
