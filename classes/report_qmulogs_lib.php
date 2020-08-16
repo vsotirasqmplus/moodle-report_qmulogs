@@ -452,4 +452,24 @@ ORDER BY {$order}";
 		return $table_name;
 	}
 
+	public static function export_records_to_csv(array $logs, string $course_short_name, int $course_id): void
+	{
+		global $strings;
+		header('HTTP/1.1 200 OK');
+		header("Content-type: text/csv");
+		header("Cache-Control: no-store, no-cache");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		header("Content-Disposition: attachment; filename=\"{$strings['base_filename']}{$course_short_name}_id_{$course_id}.csv\"");
+		$outfile = fopen("php://output", 'wb');
+		$first_key = array_keys($logs)[0];
+		$header = $logs[$first_key];
+		fputcsv($outfile, array_keys(get_object_vars($header)), ',', '"');
+		foreach($logs as $log){
+			fputcsv($outfile, get_object_vars($log), ',', '"');
+		}
+		fclose($outfile);
+		flush();
+	}
+
 }

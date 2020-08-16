@@ -42,3 +42,4 @@ $string['empty_set'] = 'got an empty set';
 $string['error_set'] = 'got an error';
 $string['pluginname'] = 'QM+ Logstore Extended Course Logs';
 $string['pluginname_desc'] = 'Extended Course Log Report with information from associated entries';
+$string['base_filename'] = 'moodle_logstore_extended_logs_course_';

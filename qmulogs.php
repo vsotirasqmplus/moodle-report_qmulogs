@@ -35,15 +35,14 @@ try {
 	$course_id = required_param('course_id', PARAM_INT);
 	/** @var object $USER */
 	if(((int)$USER->id > 1) && (sesskey() === $sesskey)) {
-		$title = 'Log Reader Extended Export CSV';
-		$url = '/test_csv.php';
+		$title = $strings['title'];
+
 		/** @var object $PAGE */
-		$PAGE->set_url($url);
+		$PAGE->set_url($url = new moodle_url('/report/qmulogs/qmulogs.php'));
 		$PAGE->set_context(context_system::instance());
 		$PAGE->set_title($title);
 		# $PAGE->set_pagelayout('');
 		$PAGE->set_heading($title);
-		# $PAGE->navbar->add($title, new moodle_url($url));
 
 		# Save posted preferences
 		$pref_name = report_qmulogs_lib::get_preference_name();
@@ -68,22 +67,7 @@ try {
 		# $course_short_name = base64_safe_encode($course_short_name);
 		$logs = report_qmulogs_lib::get_course_logs($sql);
 		if($logs) {
-			header('HTTP/1.1 200 OK');
-			header("Content-type: text/csv");
-			header("Cache-Control: no-store, no-cache");
-			header("Pragma: no-cache");
-			header("Expires: 0");
-			header('Content-Disposition: attachment; filename="moodle_logstore_extended_logs_course_'
-				   . $course_short_name . '_id_' . ($course_id) . '.csv"');
-			$outfile = fopen("php://output", 'wb');
-			$first_key = array_keys($logs)[0];
-			$header = $logs[$first_key];
-			fputcsv($outfile, array_keys(get_object_vars($header)), ',', '"');
-			foreach($logs as $log){
-				fputcsv($outfile, get_object_vars($log), ',', '"');
-			}
-			fclose($outfile);
-			flush();
+			report_qmulogs_lib::export_records_to_csv($logs, $course_short_name, $course_id);
 		}
 		exit;
 	}
