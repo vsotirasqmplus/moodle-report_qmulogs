@@ -35,8 +35,8 @@ try {
 	$course_id = required_param('course_id', PARAM_INT);
 	/** @var object $USER */
 	if(((int)$USER->id > 1) && (sesskey() === $sesskey)) {
+		/** @var array $strings */
 		$title = $strings['title'];
-
 		/** @var object $PAGE */
 		$PAGE->set_url($url = new moodle_url('/report/qmulogs/qmulogs.php'));
 		$PAGE->set_context(context_system::instance());

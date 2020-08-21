@@ -35,7 +35,7 @@ try {
 	require_login();
 	($USER->id > 1) || redirect('/');
 	$title = $strings['title'];
-	$url = '/test.php';
+	$url = new moodle_url('/report_qmulogs/index.php');
 	$PAGE->set_url($url);
 	$PAGE->set_context(context_system::instance());
 	$PAGE->set_title($title);

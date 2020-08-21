@@ -27,7 +27,7 @@ namespace report_qmulogs;
 use Exception;
 use moodleform;
 use stdClass;
-
+/** @var object $CFG */
 require_once $CFG->libdir . '/formslib.php';
 require_once $CFG->dirroot . '/report/qmulogs/locallib.php';
 
@@ -55,6 +55,9 @@ class report_qmulogs_choices_form extends moodleform
 		$this->_form->setDefaults($default_values);
 	}
 
+	/**
+	 * form definition
+	 */
 	final public function definition(): void
 	{
 		global $USER, $DB, $strings;
