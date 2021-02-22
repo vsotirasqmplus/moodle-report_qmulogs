@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SqlDialectInspection */
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -28,9 +28,9 @@ namespace report_qmulogs;
 
 
 use context_course;
+use core\log\sql_internal_table_reader;
 use ddl_exception;
 use dml_exception;
-use core\log\sql_internal_table_reader;
 use Exception;
 use moodle_url;
 use Throwable;
@@ -90,7 +90,7 @@ class report_qmulogs_lib
 		$teachers = [];
 
 		try {
-			$role = $DB->get_record('role', array('shortname' => 'editingteacher'));
+			$role = $DB->get_record('role', ['shortname' => 'editingteacher']);
 			$context = context_course::instance($courseid);
 			$teachers = get_role_users($role->id, $context, FALSE);
 		} catch(dml_exception $exception) {
@@ -139,14 +139,21 @@ ORDER BY capability";
 		$relations = [];
 		if($database_name > '' && $table_name > '') {
 			global $DB;
-			$sql = "
+			#  MySQL support for relationships
+			if($DB->get_dbfamily() == 'mysql' && $DB->get_server_info()['version'] >= '5.6') {
+				$sql = "
 SELECT TABLE_NAME, COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME 
 FROM information_schema.key_column_usage 
 WHERE  
 constraint_schema = :database_name
 AND table_name = :table_name 
 ";
-			$r = $DB->get_records_sql($sql, ['database_name' => $database_name, 'table_name' => $table_name]);
+			} else {
+				$sql = '';
+			}
+			if($sql) {
+				$r = $DB->get_records_sql($sql, ['database_name' => $database_name, 'table_name' => $table_name]);
+			}
 			$fk = NULL;
 			if(count($r) > 0) {
 				$fk = $r;
@@ -156,12 +163,15 @@ AND table_name = :table_name
 				echo "<p>" . $strings['relations_for'] . " {$database_name}.{$table_name} " . $strings['error_set'] . "</p>";
 				var_dump($r);
 			}
-			$r = $DB->get_records_sql("SELECT c.ordinal_position, c.* 
+			#  MySQL support for relationships
+			if($DB->get_dbfamily() == 'mysql' && $DB->get_server_info()['version'] >= '5.6') {
+				$r = $DB->get_records_sql("SELECT c.ordinal_position, c.* 
 FROM information_schema.columns AS c 
 WHERE TABLE_SCHEMA = ? 
 AND TABLE_NAME = ?", [$database_name, $table_name]);
-			if(count($r) > 0) {
-				$relations = $fk;
+				if(count($r) > 0) {
+					$relations = $fk;
+				}
 			}
 		}
 		return $relations;

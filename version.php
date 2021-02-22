@@ -25,9 +25,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-if(!isset($plugin)) {
-	$plugin = new stdClass();
-}
+$plugin = new stdClass();
 $plugin->component = 'report_qmulogs';
 $plugin->name = 'QM+ Logstore extended logs';
 $plugin->requires = 2019111200;
